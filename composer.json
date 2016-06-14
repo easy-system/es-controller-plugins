@@ -1,0 +1,33 @@
+{
+    "name": "easy-system/es-controller-plugins",
+    "description": "Easy System Controller Plugins",
+    "authors": [
+        {
+            "name": "Damon Smith",
+            "email": "damon.easy.system@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^5.5 || ^7.0",
+        "psr/http-message": "^1.0",
+        "easy-system/es-component": "*",
+        "easy-system/es-exception": "*",
+        "easy-system/es-http": "*",
+        "easy-system/es-services": "*",
+        "easy-system/es-events": "*",
+        "easy-system/es-system": "*",
+        "easy-system/es-modules": "*",
+        "easy-system/es-mvc": "*",
+        "easy-system/es-router": "*",
+        "easy-system/es-dispatcher": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Es\\ControllerPlugins\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": { "Es\\ControllerPlugins\\Test\\": "test/" }
+    },
+    "minimum-stability": "dev"
+}
