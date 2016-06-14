@@ -56,10 +56,11 @@ class Component implements ComponentInterface
      */
     protected $systemConfig = [
         'controller_plugins' => [
-            'url'      => 'Es\ControllerPlugins\Plugin\Url',
             'forward'  => 'Es\ControllerPlugins\Plugin\Forward',
-            'redirect' => 'Es\ControllerPlugins\Plugin\Redirect',
+            'json'     => 'Es\ControllerPlugin\Plugin\Json',
             'layout'   => 'Es\ControllerPlugins\Plugin\Layout',
+            'redirect' => 'Es\ControllerPlugins\Plugin\Redirect',
+            'url'      => 'Es\ControllerPlugins\Plugin\Url',
         ],
     ];
 
