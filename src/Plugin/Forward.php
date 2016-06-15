@@ -14,20 +14,14 @@ use Es\Events\EventsInterface;
 use Es\Mvc\ControllersInterface;
 use Es\Services\ServicesTrait;
 use InvalidArgumentException;
+use Es\Events\EventsTrait;
 
 /**
  * Dispatch another controller.
  */
 class Forward
 {
-    use ServicesTrait;
-
-    /**
-     * The events.
-     *
-     * @var \Es\Events\EventsInterface
-     */
-    protected $events;
+    use EventsTrait, ServicesTrait;
 
     /**
      * The system controllers.
@@ -35,35 +29,6 @@ class Forward
      * @var \Es\Mvc\ControllersInterface
      */
     protected $controllers;
-
-    /**
-     * Sets events.
-     *
-     * @param \Es\Events\EventsInterface $events The events
-     *
-     * @return Forward
-     */
-    public function setEvents(EventsInterface $events)
-    {
-        $this->events = $events;
-
-        return $this;
-    }
-
-    /**
-     * Gets events.
-     *
-     * @return \Es\Events\EventsInterface The events
-     */
-    public function getEvents()
-    {
-        if (! $this->events) {
-            $services     = $this->getServices();
-            $this->events = $services->get('Events');
-        }
-
-        return $this->events;
-    }
 
     /**
      * Sets the controllers.

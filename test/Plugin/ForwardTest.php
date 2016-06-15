@@ -22,25 +22,6 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
         require_once 'FakeController.php';
     }
 
-    public function testGetEvents()
-    {
-        $events   = new Events();
-        $services = new Services();
-        $services->set('Events', $events);
-
-        $plugin = new Forward();
-        $plugin->setServices($services);
-        $this->assertSame($events, $plugin->getEvents());
-    }
-
-    public function testSetEvents()
-    {
-        $events = new Events();
-        $plugin = new Forward();
-        $plugin->setEvents($events);
-        $this->assertSame($events, $plugin->getEvents());
-    }
-
     public function testGetControllers()
     {
         $controllers = new FakeControllers();

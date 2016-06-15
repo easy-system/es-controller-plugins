@@ -12,21 +12,14 @@ namespace Es\ControllerPlugins\Listener;
 use Es\Modules\ModulesEvent;
 use Es\Mvc\ControllerPluginsInterface;
 use Es\Services\ServicesTrait;
-use Es\System\ConfigInterface;
+use Es\System\ConfigTrait;
 
 /**
  * Configures the controller plugins.
  */
 class ConfigurePluginsListener
 {
-    use ServicesTrait;
-
-    /**
-     * The system configuration.
-     *
-     * @var \Es\System\Config
-     */
-    protected $config;
+    use ConfigTrait, ServicesTrait;
 
     /**
      * The controller plugins.
@@ -34,32 +27,6 @@ class ConfigurePluginsListener
      * @var \Es\Mvc\ControllerPluginsInterface
      */
     protected $plugins;
-
-    /**
-     * Sets the system configuration.
-     *
-     * @param \Es\System\ConfigInterface $config The system configuration
-     */
-    public function setConfig(ConfigInterface $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * Gets the system configuration.
-     *
-     * @return \Es\System\Config The system configuration
-     */
-    public function getConfig()
-    {
-        if (! $this->config) {
-            $services = $this->getServices();
-            $config   = $services->get('Config');
-            $this->setConfig($config);
-        }
-
-        return $this->config;
-    }
 
     /**
      * Sets the plugins.
@@ -96,10 +63,9 @@ class ConfigurePluginsListener
     {
         $plugins = $this->getPlugins();
         $config  = $this->getConfig();
-        if (! isset($config['controller_plugins'])) {
-            return;
+        if (isset($config['controller_plugins'])) {
+            $pluginsConfig = (array) $config['controller_plugins'];
+            $plugins->add($pluginsConfig);
         }
-        $pluginsConfig = (array) $config['controller_plugins'];
-        $plugins->add($pluginsConfig);
     }
 }
