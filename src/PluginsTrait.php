@@ -18,20 +18,13 @@ use Es\Services\Provider;
 trait PluginsTrait
 {
     /**
-     * The plugins of controller.
-     *
-     * @var \Es\Mvc\ControllerPluginsInterface
-     */
-    protected $plugins;
-
-    /**
      * Sets the plugins.
      *
      * @param \Es\Mvc\ControllerPluginsInterface $plugins The plugins
      */
     public function setPlugins(ControllerPluginsInterface $plugins)
     {
-        $this->plugins = $plugins;
+        Provider::getServices()->set('ControllerPlugins', $plugins);
     }
 
     /**
@@ -41,13 +34,7 @@ trait PluginsTrait
      */
     public function getPlugins()
     {
-        if (! $this->plugins) {
-            $services = Provider::getServices();
-            $plugins  = $services->get('ControllerPlugins');
-            $this->setPlugins($plugins);
-        }
-
-        return $this->plugins;
+        return Provider::getServices()->get('ControllerPlugins');
     }
 
     /**
