@@ -13,6 +13,7 @@ use Es\ControllerPlugins\ControllerPlugins;
 use Es\ControllerPlugins\Plugin\Redirect;
 use Es\ControllerPlugins\Plugin\Url;
 use Es\Http\Server;
+use Es\Services\Provider;
 use Es\Services\Services;
 use Psr\Http\Message\ResponseInterface;
 
@@ -23,17 +24,21 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         $server   = new Server();
         $services = new Services();
         $services->set('Server', $server);
+
+        Provider::setServices($services);
         $plugin = new Redirect();
-        $plugin->setServices($services);
         $this->assertSame($server, $plugin->getServer());
     }
 
     public function testSetServer()
     {
+        $services = new Services();
+        Provider::setServices($services);
+
         $server = new Server();
         $plugin = new Redirect();
         $plugin->setServer($server);
-        $this->assertSame($server, $plugin->getServer());
+        $this->assertSame($server, $services->get('Server'));
     }
 
     public function testGetUrl()
@@ -43,17 +48,23 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         $plugins->set('url', $url);
         $services = new Services();
         $services->set('ControllerPlugins', $plugins);
+
+        Provider::setServices($services);
         $plugin = new Redirect();
-        $plugin->setServices($services);
         $this->assertSame($url, $plugin->getUrl());
     }
 
     public function testSetUrl()
     {
+        $services = new Services();
+        $plugins  = new ControllerPlugins();
+        $services->set('ControllerPlugins', $plugins);
+        Provider::setServices($services);
+
         $url    = new Url();
         $plugin = new Redirect();
         $plugin->setUrl($url);
-        $this->assertSame($url, $plugin->getUrl());
+        $this->assertSame($url, $plugins->get('url'));
     }
 
     public function testToUrl()

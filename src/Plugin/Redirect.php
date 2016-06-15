@@ -10,29 +10,13 @@
 namespace Es\ControllerPlugins\Plugin;
 
 use Es\Http\Server;
-use Es\Services\ServicesTrait;
+use Es\Services\Provider;
 
 /**
  * Generates redirection by given route or url.
  */
 class Redirect
 {
-    use ServicesTrait;
-
-    /**
-     * The server.
-     *
-     * @var \Es\Http\Server
-     */
-    protected $server;
-
-    /**
-     * Url plugin.
-     *
-     * @var Url
-     */
-    protected $url;
-
     /**
      * Sets the server.
      *
@@ -42,7 +26,7 @@ class Redirect
      */
     public function setServer(Server $server)
     {
-        $this->server = $server;
+        Provider::getServices()->set('Server', $server);
 
         return $this;
     }
@@ -54,13 +38,7 @@ class Redirect
      */
     public function getServer()
     {
-        if (! $this->server) {
-            $services = $this->getServices();
-            $server   = $services->get('Server');
-            $this->setServer($server);
-        }
-
-        return $this->server;
+        return Provider::getServices()->get('Server');
     }
 
     /**
@@ -72,7 +50,7 @@ class Redirect
      */
     public function setUrl(Url $plugin)
     {
-        $this->url = $plugin;
+        $this->getPlugins()->set('url', $plugin);
 
         return $this;
     }
@@ -84,14 +62,7 @@ class Redirect
      */
     public function getUrl()
     {
-        if (! $this->url) {
-            $services = $this->getServices();
-            $plugins  = $services->get('ControllerPlugins');
-            $url      = $plugins->get('url');
-            $this->setUrl($url);
-        }
-
-        return $this->url;
+        return $this->getPlugins()->get('url');
     }
 
     /**
@@ -126,5 +97,15 @@ class Redirect
             ->withStatus($statusCode);
 
         return $response;
+    }
+
+    /**
+     * Gets controller plugins.
+     *
+     * @return \Es\ControllerPlugins\ControllerPlugins The plugins
+     */
+    protected function getPlugins()
+    {
+        return Provider::getServices()->get('ControllerPlugins');
     }
 }

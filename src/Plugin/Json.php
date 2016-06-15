@@ -10,7 +10,7 @@
 namespace Es\ControllerPlugins\Plugin;
 
 use Es\Http\ServerInterface;
-use Es\Services\ServicesTrait;
+use Es\Services\Provider;
 use RuntimeException;
 
 /**
@@ -18,15 +18,6 @@ use RuntimeException;
  */
 class Json
 {
-    use ServicesTrait;
-
-    /**
-     * The server.
-     *
-     * @var \Es\Http\ServerInterface
-     */
-    protected $server;
-
     /**
      * Sets the server.
      *
@@ -34,7 +25,7 @@ class Json
      */
     public function setServer(ServerInterface $server)
     {
-        $this->server = $server;
+        Provider::getServices()->set('Server', $server);
     }
 
     /**
@@ -44,13 +35,7 @@ class Json
      */
     public function getServer()
     {
-        if (! $this->server) {
-            $services = $this->getServices();
-            $server   = $services->get('Server');
-            $this->setServer($server);
-        }
-
-        return $this->server;
+        return Provider::getServices()->get('Server');
     }
 
     /**

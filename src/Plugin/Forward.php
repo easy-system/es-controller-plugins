@@ -10,25 +10,17 @@
 namespace Es\ControllerPlugins\Plugin;
 
 use Es\Dispatcher\DispatchEvent;
-use Es\Events\EventsInterface;
-use Es\Mvc\ControllersInterface;
-use Es\Services\ServicesTrait;
-use InvalidArgumentException;
 use Es\Events\EventsTrait;
+use Es\Mvc\ControllersInterface;
+use Es\Services\Provider;
+use InvalidArgumentException;
 
 /**
  * Dispatch another controller.
  */
 class Forward
 {
-    use EventsTrait, ServicesTrait;
-
-    /**
-     * The system controllers.
-     *
-     * @var \Es\Mvc\ControllersInterface
-     */
-    protected $controllers;
+    use EventsTrait;
 
     /**
      * Sets the controllers.
@@ -37,7 +29,7 @@ class Forward
      */
     public function setControllers(ControllersInterface $controllers)
     {
-        $this->controllers = $controllers;
+        Provider::getServices()->set('Controllers', $controllers);
     }
 
     /**
@@ -47,13 +39,7 @@ class Forward
      */
     public function getControllers()
     {
-        if (! $this->controllers) {
-            $services    = $this->getServices();
-            $controllers = $services->get('Controllers');
-            $this->setControllers($controllers);
-        }
-
-        return $this->controllers;
+        return Provider::getServices()->get('Controllers');
     }
 
     /**

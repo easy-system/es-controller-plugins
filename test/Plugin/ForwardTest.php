@@ -12,6 +12,7 @@ namespace Es\ControllerPlugins\Test\Plugin;
 use Es\ControllerPlugins\Plugin\Forward;
 use Es\Dispatcher\DispatchEvent;
 use Es\Events\Events;
+use Es\Services\Provider;
 use Es\Services\Services;
 
 class ForwardTest extends \PHPUnit_Framework_TestCase
@@ -27,17 +28,21 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
         $controllers = new FakeControllers();
         $services    = new Services();
         $services->set('Controllers', $controllers);
+
+        Provider::setServices($services);
         $plugin = new Forward();
-        $plugin->setServices($services);
         $this->assertSame($controllers, $plugin->getControllers());
     }
 
     public function testSetControllers()
     {
+        $services = new Services();
+        Provider::setServices($services);
+
         $controllers = new FakeControllers();
         $plugin      = new Forward();
         $plugin->setControllers($controllers);
-        $this->assertSame($controllers, $plugin->getControllers());
+        $this->assertSame($controllers, $services->get('Controllers'));
     }
 
     public function testInvokeOnSuccess()

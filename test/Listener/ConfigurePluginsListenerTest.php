@@ -12,6 +12,7 @@ namespace Es\ControllerPlugins\Test\Listener;
 use Es\ControllerPlugins\ControllerPlugins;
 use Es\ControllerPlugins\Listener\ConfigurePluginsListener;
 use Es\Modules\ModulesEvent;
+use Es\Services\Provider;
 use Es\Services\Services;
 use Es\System\SystemConfig;
 
@@ -22,17 +23,21 @@ class ConfigurePluginsListenerTest extends \PHPUnit_Framework_TestCase
         $plugins  = new ControllerPlugins();
         $services = new Services();
         $services->set('ControllerPlugins', $plugins);
+
+        Provider::setServices($services);
         $listener = new ConfigurePluginsListener();
-        $listener->setServices($services);
         $this->assertSame($plugins, $listener->getPlugins());
     }
 
     public function testSetPlugins()
     {
+        $services = new Services();
+        Provider::setServices($services);
+
         $plugins  = new ControllerPlugins();
         $listener = new ConfigurePluginsListener();
         $listener->setPlugins($plugins);
-        $this->assertSame($plugins, $listener->getPlugins());
+        $this->assertSame($plugins, $services->get('ControllerPlugins'));
     }
 
     public function testInvoke()

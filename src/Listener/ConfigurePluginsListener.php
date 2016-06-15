@@ -11,7 +11,7 @@ namespace Es\ControllerPlugins\Listener;
 
 use Es\Modules\ModulesEvent;
 use Es\Mvc\ControllerPluginsInterface;
-use Es\Services\ServicesTrait;
+use Es\Services\Provider;
 use Es\System\ConfigTrait;
 
 /**
@@ -19,14 +19,7 @@ use Es\System\ConfigTrait;
  */
 class ConfigurePluginsListener
 {
-    use ConfigTrait, ServicesTrait;
-
-    /**
-     * The controller plugins.
-     *
-     * @var \Es\Mvc\ControllerPluginsInterface
-     */
-    protected $plugins;
+    use ConfigTrait;
 
     /**
      * Sets the plugins.
@@ -35,7 +28,7 @@ class ConfigurePluginsListener
      */
     public function setPlugins(ControllerPluginsInterface $plugins)
     {
-        $this->plugins = $plugins;
+        Provider::getServices()->set('ControllerPlugins', $plugins);
     }
 
     /**
@@ -45,13 +38,7 @@ class ConfigurePluginsListener
      */
     public function getPlugins()
     {
-        if (! $this->plugins) {
-            $services = $this->getServices();
-            $plugins  = $services->get('ControllerPlugins');
-            $this->setPlugins($plugins);
-        }
-
-        return $this->plugins;
+        return Provider::getServices()->get('ControllerPlugins');
     }
 
     /**

@@ -12,6 +12,7 @@ namespace Es\ControllerPlugins\Test\Plugin;
 use Es\ControllerPlugins\Plugin\Url;
 use Es\Route\Route;
 use Es\Router\Router;
+use Es\Services\Provider;
 use Es\Services\Services;
 
 class UrlTest extends \PHPUnit_Framework_TestCase
@@ -21,17 +22,21 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $router   = new Router();
         $services = new Services();
         $services->set('Router', $router);
+
+        Provider::setServices($services);
         $plugin = new Url();
-        $plugin->setServices($services);
         $this->assertSame($router, $plugin->getRouter());
     }
 
     public function testSetRouter()
     {
+        $services = new Services();
+        Provider::setServices($services);
+
         $router = new Router();
         $plugin = new Url();
         $plugin->setRouter($router);
-        $this->assertSame($router, $plugin->getRouter());
+        $this->assertSame($router, $services->get('Router'));
     }
 
     public function testFromRoute()
@@ -44,7 +49,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $plugin = $this->getMock(Url::CLASS, ['getRouter']);
 
-        $routeName = 'foo';
+        $routeName   = 'foo';
         $routeParams = [
             'foo' => 'bar',
             'bat' => 'baz',

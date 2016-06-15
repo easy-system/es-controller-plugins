@@ -10,22 +10,13 @@
 namespace Es\ControllerPlugins\Plugin;
 
 use Es\Router\RouterInterface;
-use Es\Services\ServicesTrait;
+use Es\Services\Provider;
 
 /**
  * Generate URLs from route definitions.
  */
 class Url
 {
-    use ServicesTrait;
-
-    /**
-     * The router.
-     *
-     * @var \Es\Router\RouterInterface
-     */
-    protected $router;
-
     /**
      * Sets router.
      *
@@ -35,7 +26,7 @@ class Url
      */
     public function setRouter(RouterInterface $router)
     {
-        $this->router = $router;
+        Provider::getServices()->set('Router', $router);
 
         return $this;
     }
@@ -47,13 +38,7 @@ class Url
      */
     public function getRouter()
     {
-        if (! $this->router) {
-            $services = $this->getServices();
-            $router   = $services->get('Router');
-            $this->setRouter($router);
-        }
-
-        return $this->router;
+        return Provider::getServices()->get('Router');
     }
 
     /**

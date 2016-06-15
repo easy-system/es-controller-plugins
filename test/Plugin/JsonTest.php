@@ -11,7 +11,9 @@ namespace Es\ControllerPlugins\Test\Plugin;
 
 use Es\ControllerPlugins\Plugin\Json;
 use Es\Http\Server;
+use Es\Services\Provider;
 use Es\Services\Services;
+use Psr\Http\Message\ResponseInterface;
 
 class JsonTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,17 +23,20 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $services = new Services();
         $services->set('Server', $server);
 
+        Provider::setServices($services);
         $plugin = new Json();
-        $plugin->setServices($services);
         $this->assertSame($server, $plugin->getServer());
     }
 
     public function testSetServer()
     {
+        $services = new Services();
+        Provider::setServices($services);
+
         $server = new Server();
         $plugin = new Json();
         $plugin->setServer($server);
-        $this->assertSame($server, $plugin->getServer());
+        $this->assertSame($server, $services->get('Server'));
     }
 
     public function toEncodeDataProvider()
@@ -56,7 +61,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $plugin->setServer($server);
 
         $result = $plugin->encode($data, $options, $depth);
-        $this->assertInstanceOf('Psr\Http\Message\ResponseInterface', $result);
+        $this->assertInstanceOf(ResponseInterface::CLASS, $result);
         $this->assertArrayHasKey('Content-Type', $result->getHeaders());
         $encoded = (string) $result->getBody();
         $this->assertSame($encoded, json_encode($data, $options, $depth));
