@@ -10,26 +10,28 @@
 namespace Es\ControllerPlugins\Test\Plugin;
 
 use Es\ControllerPlugins\Plugin\Forward;
+use Es\Controllers\Controllers;
 use Es\Dispatcher\DispatchEvent;
 use Es\Events\Events;
-use Es\Services\Provider;
 use Es\Services\Services;
+use Es\Services\ServicesTrait;
 
 class ForwardTest extends \PHPUnit_Framework_TestCase
 {
+    use ServicesTrait;
+
     public function setUp()
     {
-        require_once 'FakeControllers.php';
         require_once 'FakeController.php';
     }
 
     public function testGetControllers()
     {
-        $controllers = new FakeControllers();
+        $controllers = new Controllers();
         $services    = new Services();
         $services->set('Controllers', $controllers);
 
-        Provider::setServices($services);
+        $this->setServices($services);
         $plugin = new Forward();
         $this->assertSame($controllers, $plugin->getControllers());
     }
@@ -37,9 +39,9 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
     public function testSetControllers()
     {
         $services = new Services();
-        Provider::setServices($services);
+        $this->setServices($services);
 
-        $controllers = new FakeControllers();
+        $controllers = new Controllers();
         $plugin      = new Forward();
         $plugin->setControllers($controllers);
         $this->assertSame($controllers, $services->get('Controllers'));
@@ -51,7 +53,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
             'foo' => 'bar',
         ];
         $controller  = new FakeController();
-        $controllers = new FakeControllers();
+        $controllers = new Controllers();
         $controllers->set('FakeController', $controller);
         $events = $this->getMock(Events::CLASS, ['trigger']);
 
@@ -88,7 +90,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
     public function testInvokeSpecifiedActionAsIndexIfActionIsNotProvided()
     {
         $controller  = new FakeController();
-        $controllers = new FakeControllers();
+        $controllers = new Controllers();
         $controllers->set('FakeController', $controller);
         $events = $this->getMock(Events::CLASS, ['trigger']);
 

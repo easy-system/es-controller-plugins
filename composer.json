@@ -18,6 +18,7 @@
         "easy-system/es-modules": "*",
         "easy-system/es-server": "*",
         "easy-system/es-mvc": "*",
+        "easy-system/es-controllers": "*",
         "easy-system/es-router": "*",
         "easy-system/es-dispatcher": "*"
     },
