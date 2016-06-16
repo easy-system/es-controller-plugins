@@ -9,8 +9,7 @@
  */
 namespace Es\ControllerPlugins\Plugin;
 
-use Es\Mvc\ViewInterface;
-use Es\Services\Provider;
+use Es\View\ViewTrait;
 
 /**
  * Allows to change the layout parameters.
@@ -19,29 +18,7 @@ use Es\Services\Provider;
  */
 class Layout
 {
-    /**
-     * Sets the view.
-     *
-     * @param \Es\Mvc\ViewInterface $view The view
-     *
-     * @return self
-     */
-    public function setView(ViewInterface $view)
-    {
-        Provider::getServices()->set('View', $view);
-
-        return $this;
-    }
-
-    /**
-     * Gets the view.
-     *
-     * @return \Es\Mvc\ViewInterface The view
-     */
-    public function getView()
-    {
-        return Provider::getServices()->get('View');
-    }
+    use ViewTrait;
 
     /**
      * Sets the layout template.

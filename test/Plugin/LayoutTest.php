@@ -10,24 +10,22 @@
 namespace Es\ControllerPlugins\Test\Plugin;
 
 use Es\ControllerPlugins\Plugin\Layout;
-use Es\Services\Provider;
 use Es\Services\Services;
+use Es\Services\ServicesTrait;
+use Es\View\View;
+use Es\View\ViewModel;
 
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        require_once 'FakeView.php';
-        require_once 'FakeViewModel.php';
-    }
+    use ServicesTrait;
 
     public function testGetView()
     {
-        $view     = new FakeView();
+        $view     = new View();
         $services = new Services();
         $services->set('View', $view);
 
-        Provider::setServices($services);
+        $this->setServices($services);
         $plugin = new Layout();
         $this->assertSame($view, $plugin->getView());
     }
@@ -35,9 +33,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testSetView()
     {
         $services = new Services();
-        Provider::setServices($services);
+        $this->setServices($services);
 
-        $view   = new FakeView();
+        $view   = new View();
         $plugin = new Layout();
         $plugin->setView($view);
         $this->assertSame($view, $services->get('View'));
@@ -46,9 +44,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testSetTemplate()
     {
         $template = 'foo';
-        $view     = $this->getMock('FakeView',      ['getLayout']);
-        $model    = $this->getMock('FakeViewModel', ['setTemplate']);
-        $plugin   = $this->getMock(Layout::CLASS,   ['getView']);
+        $view     = $this->getMock(View::CLASS,      ['getLayout']);
+        $model    = $this->getMock(ViewModel::CLASS, ['setTemplate']);
+        $plugin   = $this->getMock(Layout::CLASS,    ['getView']);
 
         $plugin
             ->expects($this->once())
@@ -71,9 +69,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetTemplate()
     {
         $template = 'foo';
-        $view     = $this->getMock('FakeView',      ['getLayout']);
-        $model    = $this->getMock('FakeViewModel', ['getTemplate']);
-        $plugin   = $this->getMock(Layout::CLASS,   ['getView']);
+        $view     = $this->getMock(View::CLASS,      ['getLayout']);
+        $model    = $this->getMock(ViewModel::CLASS, ['getTemplate']);
+        $plugin   = $this->getMock(Layout::CLASS,    ['getView']);
 
         $plugin
             ->expects($this->once())
@@ -96,9 +94,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testSetModule()
     {
         $module = 'foo';
-        $view   = $this->getMock('FakeView',      ['getLayout']);
-        $model  = $this->getMock('FakeViewModel', ['setModule']);
-        $plugin = $this->getMock(Layout::CLASS,   ['getView']);
+        $view   = $this->getMock(View::CLASS,      ['getLayout']);
+        $model  = $this->getMock(ViewModel::Class, ['setModule']);
+        $plugin = $this->getMock(Layout::CLASS,    ['getView']);
 
         $plugin
             ->expects($this->once())
@@ -121,8 +119,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetModule()
     {
         $module = 'foo';
-        $view   = $this->getMock('FakeView',      ['getLayout']);
-        $model  = $this->getMock('FakeViewModel', ['getModule']);
+        $view   = $this->getMock(View::CLASS,      ['getLayout']);
+        $model  = $this->getMock(ViewModel::CLASS, ['getModule']);
         $plugin = $this->getMock(Layout::CLASS,   ['getView']);
 
         $plugin
@@ -145,8 +143,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testInvokeReturnsViewModel()
     {
-        $model  = new FakeViewModel();
-        $view   = $this->getMock('FakeView',      ['getLayout']);
+        $model  = new ViewModel();
+        $view   = $this->getMock(View::CLASS,      ['getLayout']);
         $plugin = $this->getMock(Layout::CLASS,   ['getView']);
 
         $plugin

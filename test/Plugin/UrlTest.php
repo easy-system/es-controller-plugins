@@ -12,18 +12,20 @@ namespace Es\ControllerPlugins\Test\Plugin;
 use Es\ControllerPlugins\Plugin\Url;
 use Es\Route\Route;
 use Es\Router\Router;
-use Es\Services\Provider;
+use Es\Services\ServicesTrait;
 use Es\Services\Services;
 
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
+    use ServicesTrait;
+
     public function testGetRouter()
     {
         $router   = new Router();
         $services = new Services();
         $services->set('Router', $router);
 
-        Provider::setServices($services);
+        $this->setServices($services);
         $plugin = new Url();
         $this->assertSame($router, $plugin->getRouter());
     }
@@ -31,7 +33,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testSetRouter()
     {
         $services = new Services();
-        Provider::setServices($services);
+        $this->setServices($services);
 
         $router = new Router();
         $plugin = new Url();

@@ -13,12 +13,14 @@ use Es\ControllerPlugins\ControllerPlugins;
 use Es\ControllerPlugins\Plugin\Redirect;
 use Es\ControllerPlugins\Plugin\Url;
 use Es\Server\Server;
-use Es\Services\Provider;
 use Es\Services\Services;
-use Psr\Http\Message\ResponseInterface;
+use Es\Services\ServicesTrait;
+use Es\Http\Response;
 
 class RedirectTest extends \PHPUnit_Framework_TestCase
 {
+    use ServicesTrait;
+
     public function testGetUrl()
     {
         $url     = new Url();
@@ -27,7 +29,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         $services = new Services();
         $services->set('ControllerPlugins', $plugins);
 
-        Provider::setServices($services);
+        $this->setServices($services);
         $plugin = new Redirect();
         $this->assertSame($url, $plugin->getUrl());
     }
@@ -37,7 +39,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         $services = new Services();
         $plugins  = new ControllerPlugins();
         $services->set('ControllerPlugins', $plugins);
-        Provider::setServices($services);
+        $this->setServices($services);
 
         $url    = new Url();
         $plugin = new Redirect();
@@ -51,7 +53,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         $plugin = new Redirect();
         $plugin->setServer($server);
         $result = $plugin->toUrl('/foo', 307);
-        $this->assertInstanceOf(ResponseInterface::CLASS, $result);
+        $this->assertInstanceOf(Response::CLASS, $result);
         $this->assertSame($result->getHeader('Location'), ['/foo']);
         $this->assertSame($result->getStatusCode(), 307);
     }
@@ -78,7 +80,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($assembled));
 
         $result = $plugin->toRoute($routeName, $routeParams);
-        $this->assertInstanceOf(ResponseInterface::CLASS, $result);
+        $this->assertInstanceOf(Response::CLASS, $result);
         $this->assertSame($result->getHeader('Location'), [$assembled]);
         $this->assertSame(302, $result->getStatusCode());
     }
