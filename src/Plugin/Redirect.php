@@ -9,7 +9,7 @@
  */
 namespace Es\ControllerPlugins\Plugin;
 
-use Es\Http\Server;
+use Es\Server\ServerTrait;
 use Es\Services\Provider;
 
 /**
@@ -17,29 +17,7 @@ use Es\Services\Provider;
  */
 class Redirect
 {
-    /**
-     * Sets the server.
-     *
-     * @param \Es\Http\Server $server The server
-     *
-     * @return self
-     */
-    public function setServer(Server $server)
-    {
-        Provider::getServices()->set('Server', $server);
-
-        return $this;
-    }
-
-    /**
-     * Gets the server.
-     *
-     * @return \Es\Http\Server The server
-     */
-    public function getServer()
-    {
-        return Provider::getServices()->get('Server');
-    }
+    use ServerTrait;
 
     /**
      * Sets Url plugin.

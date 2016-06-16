@@ -10,35 +10,11 @@
 namespace Es\ControllerPlugins\Test\Plugin;
 
 use Es\ControllerPlugins\Plugin\Json;
-use Es\Http\Server;
-use Es\Services\Provider;
-use Es\Services\Services;
+use Es\Server\Server;
 use Psr\Http\Message\ResponseInterface;
 
 class JsonTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetServer()
-    {
-        $server   = new Server();
-        $services = new Services();
-        $services->set('Server', $server);
-
-        Provider::setServices($services);
-        $plugin = new Json();
-        $this->assertSame($server, $plugin->getServer());
-    }
-
-    public function testSetServer()
-    {
-        $services = new Services();
-        Provider::setServices($services);
-
-        $server = new Server();
-        $plugin = new Json();
-        $plugin->setServer($server);
-        $this->assertSame($server, $services->get('Server'));
-    }
-
     public function toEncodeDataProvider()
     {
         return [

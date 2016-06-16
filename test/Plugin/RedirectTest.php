@@ -12,35 +12,13 @@ namespace Es\ControllerPlugins\Test\Plugin;
 use Es\ControllerPlugins\ControllerPlugins;
 use Es\ControllerPlugins\Plugin\Redirect;
 use Es\ControllerPlugins\Plugin\Url;
-use Es\Http\Server;
+use Es\Server\Server;
 use Es\Services\Provider;
 use Es\Services\Services;
 use Psr\Http\Message\ResponseInterface;
 
 class RedirectTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetServer()
-    {
-        $server   = new Server();
-        $services = new Services();
-        $services->set('Server', $server);
-
-        Provider::setServices($services);
-        $plugin = new Redirect();
-        $this->assertSame($server, $plugin->getServer());
-    }
-
-    public function testSetServer()
-    {
-        $services = new Services();
-        Provider::setServices($services);
-
-        $server = new Server();
-        $plugin = new Redirect();
-        $plugin->setServer($server);
-        $this->assertSame($server, $services->get('Server'));
-    }
-
     public function testGetUrl()
     {
         $url     = new Url();

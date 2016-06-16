@@ -9,8 +9,7 @@
  */
 namespace Es\ControllerPlugins\Plugin;
 
-use Es\Http\ServerInterface;
-use Es\Services\Provider;
+use Es\Server\ServerTrait;
 use RuntimeException;
 
 /**
@@ -18,25 +17,7 @@ use RuntimeException;
  */
 class Json
 {
-    /**
-     * Sets the server.
-     *
-     * @param \Es\Http\ServerInterface $server The server
-     */
-    public function setServer(ServerInterface $server)
-    {
-        Provider::getServices()->set('Server', $server);
-    }
-
-    /**
-     * Gets the server.
-     *
-     * @return \Es\Http\ServerInterface The server
-     */
-    public function getServer()
-    {
-        return Provider::getServices()->get('Server');
-    }
+    use ServerTrait;
 
     /**
      * Encodes data and returns the response.
